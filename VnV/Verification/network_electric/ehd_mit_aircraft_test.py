@@ -90,6 +90,8 @@ def vehicle_setup():
     wing.append_airfoil(airfoil)
     vehicle.append_component(wing)
 
+    # tails sit at the height of the lowest electrode row
+    tail_z = GUESS.electrode_top_z - (GUESS.unit_rows - 1) * GUESS.unit_spacing
     for tag, span, chord, x, vertical in (('horizontal_stabilizer', 1.2, 0.25, 1.6, False),
                                           ('vertical_stabilizer',   0.5, 0.25, 1.6, True)):   # placeholders
         tail                         = (RCAIDE.Library.Components.Wings.Vertical_Tail() if vertical
@@ -106,8 +108,8 @@ def vehicle_setup():
         tail.sweeps.quarter_chord    = 0.0
         tail.twists.root             = 0.0
         tail.twists.tip              = 0.0
-        tail.origin                  = [[x, 0., 0.]]
-        tail.aerodynamic_center      = [[x + 0.25 * chord, 0., 0.]]
+        tail.origin                  = [[x, 0., tail_z]]
+        tail.aerodynamic_center      = [[x + 0.25 * chord, 0., tail_z]]
         tail.vertical                = vertical
         tail.xz_plane_symmetric      = not vertical
         tail.dynamic_pressure_ratio  = 0.9
